@@ -23,6 +23,13 @@ Launch in backup mode:
 $ docker run -d --entrypoint /backup.sh camptocamp/pghoard
 ```
 
+Launch in restore mode:
+-----------------------
+
+```shell
+$ docker run -d -e PGHOARD_RESTORE=SITE=foo --entrypoint /restore.sh camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
+```
+
 Environment variables:
 ----------------------
 
@@ -88,28 +95,14 @@ Can be either `telegraf` or `datadog`. (default `telegraf`)
 
 ## OS_TENANT_NAME
 
-## ENCRYPTION_KEYS_PUBLIC
+## PGHOARD_RESTORE_SITE
 
-Enable encryption of backups, you also need to setup `ENCRYPTION_KEYS_PRIVATE`.
-This must be a RSA key like:
-```
------BEGIN PUBLIC KEY-----
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-...
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
------END PUBLIC KEY-----
-```
+Site to restore locally from storage.
 
-## ENCRYPTION_KEYS_PRIVATE
+# Build and push Docker images
 
-Provide the private key for encryption. This must look like this :
+You can use `make.sh` to build and optionnaly upload your images:
 
-```
------BEGIN PRIVATE KEY-----
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-...
-xxxxxxxxxxxxxxxxxxxxxxxxxxxx
------END PRIVATE KEY-----
+```bash
+./make.sh myhubid/myrepositoryname
 ```

@@ -1,4 +1,6 @@
-FROM postgres:10
+ARG DOCKER_POSTGRES_VERSION=10
+
+FROM postgres:$DOCKER_POSTGRES_VERSION
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
 # pghoard release 2.1.0: 9c682141bdc2fd98d6fbd60c4ff7cd0811536d53
@@ -16,24 +18,24 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \
-     gcc \
-     g++ \
-     git \
-     make \
-     libffi-dev \
-     curl \
-     ca-certificates \
-     rsync \
-     libsnappy-dev \
-     libssl-dev \
-     python3 \
-     python3-setuptools \
-     python3-dev \
-     libpq-dev \
+  gcc \
+  g++ \
+  git \
+  make \
+  libffi-dev \
+  curl \
+  ca-certificates \
+  rsync \
+  libsnappy-dev \
+  libssl-dev \
+  python3 \
+  python3-setuptools \
+  python3-dev \
+  libpq-dev \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
-     git+https://github.com/aiven/pghoard.git@${PGHOARD_VERSION} \
-     idna awscli boto python-keystoneclient python-swiftclient \
+  git+https://github.com/aiven/pghoard.git@${PGHOARD_VERSION} \
+  idna awscli boto python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \
   && apt-get clean \
@@ -45,19 +47,19 @@ RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/rel
 # Install Gosu
 ENV GOSU_VERSION 1.9
 RUN set -x \
-    && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
-    && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
-    && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
-    && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
-    && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver keyserver.ubuntu.com --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-    && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-    && pkill -9 gpg-agent \
-    && pkill -9 dirmngr \
-    && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
-    && chmod +x /usr/local/bin/gosu \
-    && gosu nobody true \
-    && rm -rf /var/lib/apt/lists/*
+  && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+  && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
+  && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
+  && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
+  && export GNUPGHOME="$(mktemp -d)" \
+  && gpg --keyserver keyserver.ubuntu.com --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+  && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+  && pkill -9 gpg-agent \
+  && pkill -9 dirmngr \
+  && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+  && chmod +x /usr/local/bin/gosu \
+  && gosu nobody true \
+  && rm -rf /var/lib/apt/lists/*
 
 # pghoard 1.6.0 check for the existence of PG_VERSION in pg_data_directory...
 RUN mkdir -p /home/postgres/restore && \
@@ -69,6 +71,7 @@ COPY conf.d /etc/confd/conf.d
 COPY templates /etc/confd/templates
 
 COPY /docker-entrypoint.sh /
+COPY /restore.sh /
 WORKDIR /home/postgres
 
 VOLUME [ "/home/postgres/pghoard", "/var/lib/pghoard" ]
