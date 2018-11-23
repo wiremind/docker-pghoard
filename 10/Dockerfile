@@ -29,7 +29,7 @@ RUN apt-get update \
      libpq-dev \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
-     git+https://github.com/camptocamp/pghoard.git@${PGHOARD_VERSION} \
+     git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} \
      idna awscli botocore python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \

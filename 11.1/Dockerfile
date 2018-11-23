@@ -1,4 +1,4 @@
-FROM postgres:$DOCKER_POSTGRES_VERSION
+FROM postgres:11.1
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -30,7 +30,7 @@ RUN apt-get update \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
      git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} \
-     idna awscli boto python-keystoneclient python-swiftclient \
+     idna awscli botocore python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \
   && apt-get clean \
