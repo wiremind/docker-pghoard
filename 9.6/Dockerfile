@@ -3,8 +3,8 @@ MAINTAINER Camptocamp <docker@camptocamp.com>
 
 ENV DEBIAN_FRONTEND=noninteractive \
   HOME=/home/postgres \
-  CONFD_VERSION=0.14.0 \
-  PGHOARD_VERSION=1.7.0 \
+  CONFD_VERSION=0.16.0 \
+  PGHOARD_VERSION=2.0.0 \
   PGHOARD_BASEBACKUP_COUNT=1 \
   PGHOARD_BASEBACKUP_INTERVAL_HOURS=24 \
   PGHOARD_LOG_LEVEL=INFO \
@@ -40,7 +40,7 @@ RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/rel
   && chmod +x /usr/local/bin/confd
 
 # Install Gosu
-ENV GOSU_VERSION 1.9
+ENV GOSU_VERSION 1.11
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
     && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
