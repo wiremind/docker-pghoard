@@ -23,6 +23,13 @@ Launch in backup mode:
 $ docker run -d --entrypoint /backup.sh camptocamp/pghoard
 ```
 
+Launch in restore mode:
+-----------------------
+
+```shell
+$ docker run -d -e PGHOARD_RESTORE=SITE=foo --entrypoint /restore.sh camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
+```
+
 Environment variables:
 ----------------------
 
@@ -113,6 +120,10 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 -----END PRIVATE KEY-----
 ```
+
+## PGHOARD_RESTORE_SITE
+
+Site to restore locally from storage.
 
 # Build and push Docker images
 
